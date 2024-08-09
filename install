@@ -1,0 +1,31 @@
+#! /bin/bash
+
+apt update
+apt upgrade -y
+apt install unzip gpg postgresql -y
+ 
+apt install ./libjpeg-turbo-official32_2.1.5.1_amd64.deb -y
+apt install ./wkhtmltox_0.12.6.1-3.bookworm_amd64.deb -y
+cp /usr/local/bin/wkhtmltoimage /usr/bin/wkhtmltoimage
+cp /usr/local/bin/wkhtmltopdf /usr/bin/wkhtmltopdf
+
+wget -q -O - https://nightly.odoo.com/odoo.key |  gpg --dearmor -o /usr/share/keyrings/odoo-archive-keyring.gpg
+
+echo 'deb [signed-by=/usr/share/keyrings/odoo-archive-keyring.gpg] https://nightly.odoo.com/16.0/nightly/deb ./' | tee /etc/apt/sources.list.d/odoo.list
+
+apt update 
+apt install odoo -y
+
+mkdir -p  /usr/lib/python3/dist-packages/reportlab/fonts
+cp pfbfer.zip /usr/lib/python3/dist-packages/reportlab/fonts
+cd /usr/lib/python3/dist-packages/reportlab/fonts/
+unzip pfbfer.zip
+systemctl restart odoo
+
+echo ""
+echo "http://dom-ip:8069"
+
+
+
+
+
